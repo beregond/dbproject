@@ -7,7 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity
- * @ORM\Table("Clas")
+ * @ORM\Table("Class")
  */
 Class Clas
 {
@@ -41,6 +41,6 @@ Class Clas
 		$this->players = new ArrayCollection();
 	}
 }
-}
+
  
 ?>

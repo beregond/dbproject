@@ -33,7 +33,7 @@ class Item
 	/**
 	* @ORM\Column(type="Integer")
 	*/
-	protected $strenght
+	protected $strenght;
 	/**
 	* @ORM\Column(type="Integer")
 	*/

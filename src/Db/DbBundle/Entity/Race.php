@@ -30,7 +30,7 @@ Class Race
 	/**
 	* @ORM\Column(type="Integer")
 	*/
-	protected $strenght
+	protected $strenght;
 	/**
 	 * @ORM\OneToMany(targetEntity="Player", mappedBy="Race")
 	 */
@@ -41,7 +41,4 @@ Class Race
 		$this->players = new ArrayCollection();
 	}
 }
-}
- 
-?>
 

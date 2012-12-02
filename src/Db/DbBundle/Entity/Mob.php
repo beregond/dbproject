@@ -37,7 +37,7 @@ Class Mob
 	/**
 	* @ORM\Column(type="string", length=100)
 	*/
-	protected $race
+	protected $race;
 	/**
      * @ManyToMany(targetEntity="Place", inversedBy="users")
      * @JoinTable(name="users_place")
@@ -48,4 +48,4 @@ Class Mob
         $this->place = new ArrayCollection();
     }
 }
-?>
+
