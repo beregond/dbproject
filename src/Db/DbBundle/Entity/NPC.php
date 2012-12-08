@@ -11,6 +11,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 Class NPC
 {
 	/**
+	 * @ORM\Id
+	 * @ORM\Column(type="integer")
+	 * @ORM\GeneratedValue(strategy="AUTO")
+	 */
+	protected $id;
+	/**
 	 * @ORM\ManyToOne(targetEntity="Place", inversedBy="NPC")
 	 */
 	protected $Place;
@@ -19,8 +25,8 @@ Class NPC
 	*/
 	protected $name;
 	 /**
-     * @ManyToMany(targetEntity="Quest", inversedBy="NPC")
-     * @JoinTable(name="Quest_NPC")
+     * @ORM\ManyToMany(targetEntity="Quest", inversedBy="NPC")
+     * @ORM\JoinTable(name="Quest_NPC")
      */
     private $quest;
 

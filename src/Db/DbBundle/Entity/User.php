@@ -43,8 +43,8 @@ class User
 		$this->players = new ArrayCollection();
 	}
 	/**
-     * @OneToOne(targetEntity="Place", inversedBy="User")
-     * @JoinColumn(name="user_id", referencedColumnName="id")
+     * @ORM\OneToOne(targetEntity="Place", inversedBy="User")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     private $place;
 }

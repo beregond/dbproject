@@ -11,6 +11,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 Class Quest
 {
 	/**
+	 * @ORM\Id
+	 * @ORM\Column(type="integer")
+	 * @ORM\GeneratedValue(strategy="AUTO")
+	 */
+	protected $id;
+	/**
 	* @ORM\Column(type="string", length=100)
 	*/
 	protected $name;
@@ -23,12 +29,12 @@ Class Quest
 	*/
 	protected $description;
 	 /**
-     * @ManyToMany(targetEntity="Player", inversedBy="Quest")
-     * @JoinTable(name="Player_Quest")
+     * @ORM\ManyToMany(targetEntity="Player", inversedBy="Quest")
+     * @ORM\JoinTable(name="Player_Quest")
      */
     private $Player;
 	/**
-	 * @ManyToMany(targetEntity="NPC", mappedBy="Quest")
+	 * @ORM\ManyToMany(targetEntity="NPC", mappedBy="Quest")
 	 */
 	private $npc;
 

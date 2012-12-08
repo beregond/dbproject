@@ -11,23 +11,29 @@ use Doctrine\Common\Collections\ArrayCollection;
 Class Mob
 {
 	/**
+	 * @ORM\Id
+	 * @ORM\Column(type="integer")
+	 * @ORM\GeneratedValue(strategy="AUTO")
+	 */
+	protected $id;
+	/**
 	* @ORM\Column(type="string", length=100)
 	*/
 	protected $name;
 	/**
-	* @ORM\Column(type="Integer")
+	* @ORM\Column(type="integer")
 	*/
 	protected $intelligence;
 	/**
-	* @ORM\Column(type="Integer")
+	* @ORM\Column(type="integer")
 	*/
 	protected $dexterity;
 	/**
-	* @ORM\Column(type="Integer")
+	* @ORM\Column(type="integer")
 	*/
 	protected $mana;
 	/**
-	* @ORM\Column(type="Integer")
+	* @ORM\Column(type="integer")
 	*/
 	protected $strenght;
 	/**
@@ -39,8 +45,8 @@ Class Mob
 	*/
 	protected $race;
 	/**
-     * @ManyToMany(targetEntity="Place", inversedBy="users")
-     * @JoinTable(name="users_place")
+     * @ORM\ManyToMany(targetEntity="Place", inversedBy="users")
+     * @ORM\JoinTable(name="users_place")
      */
     private $place;
 

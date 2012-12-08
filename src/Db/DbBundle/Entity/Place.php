@@ -11,14 +11,21 @@ use Doctrine\Common\Collections\ArrayCollection;
 Class Place
 {
 	/**
-    * @OneToOne(targetEntity="Place", mappedBy="user")
+	 * @ORM\Id
+	 * @ORM\Column(type="integer")
+	 * @ORM\GeneratedValue(strategy="AUTO")
+	 */
+	protected $id;
+	/**
+    * @ORM\OneToOne(targetEntity="Place", mappedBy="user")
     */
     private $user;
 	/**
 	 * @ORM\OneToMany(targetEntity="NPC", mappedBy="Place")
 	 */
-	protected $npc;/**
-     * @ManyToMany(targetEntity="Mob", mappedBy="Place")
+	protected $npc;
+	/**
+     * @ORM\ManyToMany(targetEntity="Mob", mappedBy="Place")
      */
     private $Mob;
 

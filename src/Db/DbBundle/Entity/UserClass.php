@@ -7,11 +7,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity
- * @ORM\Table("Race")
+ * @ORM\Table("Class")
  */
-Class Race
+Class UserClass
 {
-		/**
+	/**
 	 * @ORM\Id
 	 * @ORM\Column(type="integer")
 	 * @ORM\GeneratedValue(strategy="AUTO")
@@ -38,7 +38,7 @@ Class Race
 	*/
 	protected $strenght;
 	/**
-	 * @ORM\OneToMany(targetEntity="Player", mappedBy="Race")
+	 * @ORM\OneToMany(targetEntity="Player", mappedBy="Class")
 	 */
 	protected $players;
 
@@ -48,3 +48,5 @@ Class Race
 	}
 }
 
+ 
+?>

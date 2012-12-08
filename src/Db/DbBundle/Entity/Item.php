@@ -11,6 +11,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 class Item
 {
 	/**
+	 * @ORM\Id
+	 * @ORM\Column(type="integer")
+	 * @ORM\GeneratedValue(strategy="AUTO")
+	 */
+	protected $id;
+	/**
 	* @ORM\Column(type="string", length=100)
 	*/
 	protected $type;
@@ -19,40 +25,44 @@ class Item
 	*/
 	protected $name;
 	/**
-	* @ORM\Column(type="Integer")
+	* @ORM\Column(type="integer")
 	*/
 	protected $intelligence;
 	/**
-	* @ORM\Column(type="Integer")
+	* @ORM\Column(type="integer")
 	*/
 	protected $dexterity;
 	/**
-	* @ORM\Column(type="Integer")
+	* @ORM\Column(type="integer")
 	*/
 	protected $mana;
 	/**
-	* @ORM\Column(type="Integer")
+	* @ORM\Column(type="integer")
 	*/
 	protected $strenght;
 	/**
-	* @ORM\Column(type="Integer")
+	* @ORM\Column(type="integer")
 	*/
 	protected $required_intelligence;
 	/**
-	* @ORM\Column(type="Integer")
+	* @ORM\Column(type="integer")
 	*/
 	protected $required_dexterity;
 	/**
-	* @ORM\Column(type="Integer")
+	* @ORM\Column(type="integer")
 	*/
 	protected $required_mana;
 	/**
-	* @ORM\Column(type="Integer")
+	* @ORM\Column(type="integer")
 	*/
 	protected $required_strenght;
 	/**
-	* @ORM\ManyToOne(targetEntity="Player", inversedBy="Item")
+	* @ORM\ManyToOne(targetEntity="Player", inversedBy="item")
 	*/
 	protected $player;
+	/**
+	 * @ORM\Column(type="boolean")
+	 */
+	protected $weared = false;
 }
-?>
+
