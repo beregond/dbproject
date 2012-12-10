@@ -4,7 +4,7 @@ jms_security_extra:
 
 security:
     encoders:
-        Symfony\Component\Security\Core\User\User: plaintext
+        Symfony\Component\Security\symfony use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;Core\User\User: plaintext
 
     role_hierarchy:
         ROLE_ADMIN:       ROLE_USER
@@ -14,8 +14,21 @@ security:
         in_memory:
             memory:
                 users:
+                    user: { password: userpass, roles: [ 'ROLE_USER' ] }
 
     firewalls:
+        main:
+            pattern:      .*
+            security: true
+            form-login:
+                provider:       in_memory
+                login_path:     /user/new
+                use_forward:    false
+                check_path:     /login_check
+                failure_path:   null
+            logout:       true
+            anonymous:    true 
+            
         dev:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
             security: false

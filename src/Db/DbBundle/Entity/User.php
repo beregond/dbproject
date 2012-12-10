@@ -22,12 +22,12 @@ class User
 	 * @ORM\Column(type="string", length=100)
 	 */
 	protected $name;
-	
+
 	/**
 	 * @ORM\Column(type="string", length=100)
 	 */
 	protected $surname;
-	
+
 	/**
 	 * @ORM\Column(type="string", length=100)
 	 */
@@ -38,15 +38,17 @@ class User
 	 */
 	protected $players;
 
+	/**
+	 * Constructor.
+	 */
 	public function __construct()
 	{
 		$this->players = new ArrayCollection();
 	}
-	/**
-     * @ORM\OneToOne(targetEntity="Place", inversedBy="User")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
-     */
-    private $place;
-}
 
-?>
+	/**
+	 * @ORM\OneToOne(targetEntity="Place", inversedBy="User")
+	 * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+	 */
+	protected $place;
+}
