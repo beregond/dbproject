@@ -32,7 +32,7 @@ class DefaultController extends Controller
 
 	/**
 	 * @Route("/adduser", name="adduser")
-	 * @Template()
+	 * @Template("DbBundle::form.html.twig")
 	 */
 	public function addUserAction(Request $request)
 	{
@@ -40,10 +40,26 @@ class DefaultController extends Controller
 
 		$user = new Entity\User();
 		$form = $this->createFormBuilder($user)
+			->add('name', 'text', array('label' => 'Imię'))
+			->add('surname', 'text', array('label' => 'Nazwisko'))
+			->add('email', 'email', array('label' => 'Adres email'))
 			->getForm()
 		;
 
-		$view['form'] = $form;
+		if ($request->isMethod('POST')) {
+			$form->bindRequest($request);
+			if ($form->isValid()) {
+				$em  = $this->getDoctrine()->getEntityManager();
+				$em->persist($user);
+				$em->flush();
+
+				$this->get('session')->setFlash('notice', 'Użytkownik dodany!');
+
+				return $this->redirect($this->generateUrl("users"));
+			}
+		}
+
+		$view['form'] = $form->createView();
 
 		return $view;
 	}
