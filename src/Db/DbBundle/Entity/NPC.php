@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @ORM\Entity
  * @ORM\Table("NPC")
  */
-Class NPC
+class NPC extends Entity
 {
 	/**
 	 * @ORM\Id
@@ -16,21 +16,25 @@ Class NPC
 	 * @ORM\GeneratedValue(strategy="AUTO")
 	 */
 	protected $id;
+
 	/**
 	 * @ORM\ManyToOne(targetEntity="Place", inversedBy="NPC")
 	 */
-	protected $Place;
-	/**
-	* @ORM\Column(type="string", length=100)
-	*/
-	protected $name;
-	 /**
-     * @ORM\ManyToMany(targetEntity="Quest", inversedBy="NPC")
-     * @ORM\JoinTable(name="Quest_NPC")
-     */
-    private $quest;
+	protected $place;
 
-    public function __construct() {
-        $this->quest = new ArrayCollection();
-    }
+	/**
+	 * @ORM\Column(type="string", length=100)
+	 */
+	protected $name;
+
+	 /**
+	 * @ORM\ManyToMany(targetEntity="Quest", inversedBy="NPC")
+	 * @ORM\JoinTable(name="Quest_NPC")
+	 */
+	private $quest;
+
+	public function __construct()
+	{
+		$this->quest = new ArrayCollection();
+	}
 }

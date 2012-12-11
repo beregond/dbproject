@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @ORM\Entity
  * @ORM\Table("Quest")
  */
-Class Quest
+class Quest extends Entity
 {
 	/**
 	 * @ORM\Id
@@ -16,31 +16,38 @@ Class Quest
 	 * @ORM\GeneratedValue(strategy="AUTO")
 	 */
 	protected $id;
+
 	/**
-	* @ORM\Column(type="string", length=100)
-	*/
-	protected $name;
-		/**
-	* @ORM\Column(type="string", length=100)
-	*/
-	protected $reward;
-	/**
-	* @ORM\Column(type="string", length=100)
-	*/
-	protected $description;
-	 /**
-     * @ORM\ManyToMany(targetEntity="Player", inversedBy="Quest")
-     * @ORM\JoinTable(name="Player_Quest")
-     */
-    private $Player;
-	/**
-	 * @ORM\ManyToMany(targetEntity="NPC", mappedBy="Quest")
+	 * @ORM\Column(type="string", length=100)
 	 */
-	private $npc;
+	protected $name;
 
-    public function __construct() {
-        $this->Player = new ArrayCollection();
-        $this->npc = new ArrayCollection();
-    }
+	/**
+	 * @ORM\Column(type="string", length=100)
+	 */
+	protected $reward;
 
+	/**
+	 * @ORM\Column(type="string", length=100)
+	 */
+	protected $description;
+
+	 /**
+	 * @ORM\ManyToMany(targetEntity="Player", inversedBy="Quest")
+	 * @ORM\JoinTable(name="Player_Quest")
+	 */
+	protected $Player;
+
+	/**
+ 	 * @ORM\ManyToMany(targetEntity="NPC", mappedBy="Quest")
+ 	 */
+	protected $npc;
+
+	/**
+	 * Constructor.
+	 */
+	public function __construct() {
+		$this->Player = new ArrayCollection();
+		$this->npc = new ArrayCollection();
+	}
 }

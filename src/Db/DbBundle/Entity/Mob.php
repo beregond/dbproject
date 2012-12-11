@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @ORM\Entity
  * @ORM\Table("Mob")
  */
-Class Mob
+class Mob extends Entity
 {
 	/**
 	 * @ORM\Id
@@ -16,42 +16,53 @@ Class Mob
 	 * @ORM\GeneratedValue(strategy="AUTO")
 	 */
 	protected $id;
+
 	/**
-	* @ORM\Column(type="string", length=100)
-	*/
+	 * @ORM\Column(type="string", length=100)
+	 */
 	protected $name;
+
 	/**
-	* @ORM\Column(type="integer")
-	*/
+	 * @ORM\Column(type="integer")
+	 */
 	protected $intelligence;
+
 	/**
-	* @ORM\Column(type="integer")
-	*/
+	 * @ORM\Column(type="integer")
+	 */
 	protected $dexterity;
+
 	/**
-	* @ORM\Column(type="integer")
-	*/
+	 * @ORM\Column(type="integer")
+	 */
 	protected $mana;
+
 	/**
-	* @ORM\Column(type="integer")
-	*/
+	 * @ORM\Column(type="integer")
+	 */
 	protected $strenght;
+
 	/**
-	* @ORM\Column(type="string", length=100)
-	*/
+	 * @ORM\Column(type="string", length=100)
+	 */
 	protected $description;
+
 	/**
-	* @ORM\Column(type="string", length=100)
-	*/
+	 * @ORM\Column(type="string", length=100)
+	 */
 	protected $race;
+
 	/**
-     * @ORM\ManyToMany(targetEntity="Place", inversedBy="users")
-     * @ORM\JoinTable(name="users_place")
-     */
-    private $place;
+	 * @ORM\ManyToMany(targetEntity="Place", inversedBy="users")
+	 * @ORM\JoinTable(name="users_place")
+	 */
+	protected $place;
 
-    public function __construct() {
-        $this->place = new ArrayCollection();
-    }
+	/**
+	 * Constructor.
+	 */
+	public function __construct()
+	{
+		$this->place = new ArrayCollection();
+	}
 }
-

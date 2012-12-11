@@ -9,7 +9,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @ORM\Entity
  * @ORM\Table("Users")
  */
-class User
+class User extends Entity
 {
 	/**
 	 * @ORM\Id
@@ -39,16 +39,16 @@ class User
 	protected $players;
 
 	/**
+	 * @ORM\OneToOne(targetEntity="Place", inversedBy="User")
+	 * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+	 */
+	protected $place;
+
+	/**
 	 * Constructor.
 	 */
 	public function __construct()
 	{
 		$this->players = new ArrayCollection();
 	}
-
-	/**
-	 * @ORM\OneToOne(targetEntity="Place", inversedBy="User")
-	 * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
-	 */
-	protected $place;
 }
