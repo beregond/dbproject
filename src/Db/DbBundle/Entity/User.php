@@ -4,6 +4,7 @@ namespace Db\DbBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -19,17 +20,21 @@ class User extends Entity
 	protected $id;
 
 	/**
-	 * @ORM\Column(type="string", length=100)
+	 * @ORM\Column(type="string", length=100, nullable=false)
+	 * @Assert\NotBlank()
 	 */
 	protected $name;
 
 	/**
-	 * @ORM\Column(type="string", length=100)
+	 * @ORM\Column(type="string", length=100, nullable=false)
+	 * @Assert\NotBlank()
 	 */
 	protected $surname;
 
 	/**
-	 * @ORM\Column(type="string", length=100)
+	 * @ORM\Column(type="string", length=100, nullable=false)
+	 * @Assert\NotBlank()
+	 * @Assert\Email()
 	 */
 	protected $email;
 
@@ -37,12 +42,6 @@ class User extends Entity
 	 * @ORM\OneToMany(targetEntity="Player", mappedBy="user")
 	 */
 	protected $players;
-
-	/**
-	 * @ORM\OneToOne(targetEntity="Place", inversedBy="User")
-	 * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
-	 */
-	protected $place;
 
 	/**
 	 * Constructor.

@@ -46,7 +46,7 @@ class Player extends Entity
 	/**
 	 * @ORM\Column(type="integer")
 	 */
-	protected $Strenght;
+	protected $strenght;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity="User", inversedBy="player")
@@ -61,17 +61,23 @@ class Player extends Entity
 	/**
 	 * @ORM\ManyToOne(targetEntity="UserClass", inversedBy="Player")
 	 */
-	protected $Class;
+	protected $class;
 
 			/**
 	 * @ORM\ManyToOne(targetEntity="Race", inversedBy="Player")
 	 */
-	protected $Race;
+	protected $race;
 
 	/**
 	 * @ORM\ManyToMany(targetEntity="Quest", mappedBy="Player")
 	 */
-	protected $Quest;
+	protected $quest;
+
+	/**
+	 * @ORM\OneToOne(targetEntity="Place", inversedBy="User")
+	 * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+	 */
+	protected $place;
 
 	/**
 	 * Constructor.
