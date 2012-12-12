@@ -7,6 +7,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Db\DbBundle\Entity;
+use Db\DbBundle\Util\Paginator;
+use Db\DbBundle\Form\DeleteType;
 
 class DefaultController extends Controller
 {
@@ -27,12 +29,32 @@ class DefaultController extends Controller
 	{
 		$view = array('menu' => 'users');
 
+		$users = $this
+			->getDoctrine()
+			->getEntityManager()
+			->createQueryBuilder()
+			->select('u')
+			->from('DbBundle:User', 'u')
+			->orderBy('u.id')
+		;
+
+		$users = new Paginator($users);
+		$users->page($request->get('page', 1));
+		$view['users'] = $users;
+
+		$view['deleteform'] = $this->createForm(new DeleteType())->createView();
+
 		return $view;
 	}
 
 	/**
+	 * Adding user.
+	 *
 	 * @Route("/adduser", name="adduser")
 	 * @Template("DbBundle::form.html.twig")
+	 *
+	 * @param Request $request
+	 * @return array
 	 */
 	public function addUserAction(Request $request)
 	{
@@ -49,7 +71,7 @@ class DefaultController extends Controller
 		if ($request->isMethod('POST')) {
 			$form->bindRequest($request);
 			if ($form->isValid()) {
-				$em  = $this->getDoctrine()->getEntityManager();
+				$em = $this->getDoctrine()->getEntityManager();
 				$em->persist($user);
 				$em->flush();
 

@@ -1,0 +1,26 @@
+{% if numeration|length > 0 %}
+<span class="numeration">
+	{% if numeration.active is defined %}
+		{% set numactive = numeration.active %}
+	{% else %}
+		{% set numactive = false %}
+	{% endif %}
+
+	{% if values is not defined %}
+		{% set values = [] %}
+	{% endif %}
+
+	{% if numeration.numeration is defined %}
+		{% for number in numeration.numeration %}
+			<span class="numeration-container">
+			{% if number.page is defined %}
+				{% set values = values|merge({'page': number.page}) %}
+				<a href="{{ path(path, values) }}" class="numerationpage{% if number.title == numactive and numactive != false %} numerationpage-active{% endif %}" title="{{ number.title }}">{{ number.title }}</a>
+			{% else %}
+				{{ number.title }}
+			{% endif %}
+			</span>
+		{% endfor %}
+	{% endif %}
+</span>
+{% endif %}

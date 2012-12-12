@@ -1,5 +1,39 @@
 {% extends "DbBundle::base.html.twig" %}
 
 {% block body %}
-
+	<h2>Użytkownicy</h2>
+	{% for user in users %}
+		{% if loop.first %}
+			{% set deleteform %}
+				{{ form_rest(deleteform) }}
+			{% endset %}
+			<table>
+				<tr>
+					<th>Id</th>
+					<th>Imię</th>
+					<th>Nazwisko</th>
+					<th>email</th>
+					<th></th>
+				</tr>
+		{% endif %}
+		<tr>
+			<td>{{ user.id }}</td>
+			<td>{{ user.name }}</td>
+			<td>{{ user.surname }}</td>
+			<td>{{ user.email }}</td>
+			<td>
+				<a href="">Edytuj</a>
+				<form method="post">
+					{{ deleteform }}
+					<input type="submit" value="Usuń" />
+				</form>
+			</td>
+		</tr>
+		{% if loop.last %}
+			</table>
+		{% endif %}
+	{% else %}
+		<div class="center">Brak rekordów</div>
+	{% endfor %}
+	<a href="{{ path('adduser') }}">Dodaj</a>
 {% endblock %}
