@@ -5,15 +5,16 @@
 	{% for user in users %}
 		{% if loop.first %}
 			{% set deleteform %}
-				{{ form_rest(deleteform) }}
+				{% include "DbBundle::deleteform.html.twig" with {'deleteform': deleteform} %}
 			{% endset %}
-			<table>
+			<table class="table table-stripped">
 				<tr>
 					<th>Id</th>
 					<th>Imię</th>
 					<th>Nazwisko</th>
-					<th>email</th>
-					<th></th>
+					<th>Email</th>
+					<th>Akcje</th>
+					<th>Usuń</th>
 				</tr>
 		{% endif %}
 		<tr>
@@ -22,10 +23,13 @@
 			<td>{{ user.surname }}</td>
 			<td>{{ user.email }}</td>
 			<td>
-				<a href="">Edytuj</a>
-				<form method="post">
+				<div class="btn-group">
+					<a class="btn" data-hover="btn-primary" href="{{ path('edituser', {'user': user.id}) }}">Edytuj</a>
+				</div>
+			</td>
+			<td>
+				<form class="form-inline form-confirmation" action="{{ path('deleteuser', {'user': user.id}) }}" method="post" title="Na pewno usunąć użytkownika?">
 					{{ deleteform }}
-					<input type="submit" value="Usuń" />
 				</form>
 			</td>
 		</tr>
@@ -35,5 +39,5 @@
 	{% else %}
 		<div class="center">Brak rekordów</div>
 	{% endfor %}
-	<a href="{{ path('adduser') }}">Dodaj</a>
+	<a class="btn btn-inverse" href="{{ path('adduser') }}">Dodaj użytkownika</a>
 {% endblock %}

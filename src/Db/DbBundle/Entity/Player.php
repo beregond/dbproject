@@ -4,10 +4,12 @@ namespace Db\DbBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity
  * @ORM\Table("Player")
+ * @UniqueEntity("name")
  */
 class Player extends Entity
 {
@@ -19,7 +21,7 @@ class Player extends Entity
 	protected $id;
 
 	/**
-	 * @ORM\Column(type="string", length=100)
+	 * @ORM\Column(type="string", length=100, unique=true)
 	 */
 	protected $name;
 
@@ -63,7 +65,7 @@ class Player extends Entity
 	 */
 	protected $class;
 
-			/**
+	/**
 	 * @ORM\ManyToOne(targetEntity="Race", inversedBy="Player")
 	 */
 	protected $race;

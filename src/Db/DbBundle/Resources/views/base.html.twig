@@ -3,28 +3,48 @@
 	<head>
 		<meta charset="UTF-8" />
 		<title>{% block title %}Salvage Internet Armageddon - the game{% endblock %}</title>
-		{% block stylesheets %}{% endblock %}
 		<link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+		{% block stylesheets %}
+			{% stylesheets
+				'bundles/db/css/style.css'
+				'bundles/db/twitter/css/bootstrap.min.css'
+				'bundles/db/twitter/css/bootstrap-responsive.min.css'
+			%}
+				<link rel="stylesheet" type="text/css" href="{{ asset_url }}" />
+			{% endstylesheets %}
+		{% endblock %}
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	</head>
 	<body>
-		<h1>Salvage Internet Armageddon</h1>
-		{% if app.session.hasFlash('notice') %}
-			<div class="flash-notice">{{ app.session.flash('notice') }}</div>
-		{% endif %}
+		<div class="container">
+			<h1>Salvage Internet Armageddon</h1>
+			{% if app.session.hasFlash('notice') %}
+				<div class="center text-info">{{ app.session.flash('notice') }}</div>
+			{% endif %}
 
-		{% if menu is not defined %}
-			{% set menu = '' %}
-		{% endif %}
-		<aside>
-			<nav>
-				<ul>
-					<li><a href="{{ path('users') }}" {% if menu == 'users' %}class="selected"{% endif %}>Użytkownicy</a></li>
-				</ul>
-			</nav>
-		</aside>
-		<div class="body">
-			{% block body %}{% endblock %}
+			{% if menu is not defined %}
+				{% set menu = '' %}
+			{% endif %}
+			<div class="row-fluid">
+				<aside class="span3 well sidebar-nav">
+					<nav>
+						<ul class="nav nav-list">
+							<li class="nav-header">Menu</li>
+							<li {% if menu == 'users' %}class="active"{% endif %}><a href="{{ path('users') }}">Użytkownicy</a></li>
+						</ul>
+					</nav>
+				</aside>
+				<div class="span9 body">
+					{% block body %}{% endblock %}
+				</div>
+			</div>
 		</div>
-		{% block javascripts %}{% endblock %}
+		{% block javascripts %}
+			{% javascripts
+				'bundles/db/js/script.js'
+			%}
+				<script type="text/javascript" src="{{ asset_url }}"></script>
+			{% endjavascripts %}
+		{% endblock %}
 	</body>
 </html>

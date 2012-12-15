@@ -18,7 +18,7 @@ class DeleteType extends AbstractType
 	public function buildForm(FormBuilderInterface $builder, array $options)
 	{
 		$builder
-			->add('confirmation', 'checkbox')
+			->add('confirmation', 'checkbox', array('required' => false, 'label' => 'Potwierdź'))
 		;
 	}
 

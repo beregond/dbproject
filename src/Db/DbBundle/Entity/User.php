@@ -5,14 +5,18 @@ namespace Db\DbBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity
  * @ORM\Table("Users")
+ * @UniqueEntity("email")
  */
 class User extends Entity
 {
 	/**
+	 * @var int
+	 *
 	 * @ORM\Id
 	 * @ORM\Column(type="integer")
 	 * @ORM\GeneratedValue(strategy="AUTO")
@@ -20,25 +24,39 @@ class User extends Entity
 	protected $id;
 
 	/**
+	 * @var string
+	 *
 	 * @ORM\Column(type="string", length=100, nullable=false)
+	 *
 	 * @Assert\NotBlank()
+	 * @Assert\MaxLength(100)
 	 */
 	protected $name;
 
 	/**
+	 * @var string
+	 *
 	 * @ORM\Column(type="string", length=100, nullable=false)
+	 *
 	 * @Assert\NotBlank()
+	 * @Assert\MaxLength(100)
 	 */
 	protected $surname;
 
 	/**
-	 * @ORM\Column(type="string", length=100, nullable=false)
+	 * @var string
+	 *
+	 * @ORM\Column(type="string", length=100, unique=true, nullable=false)
+	 *
 	 * @Assert\NotBlank()
 	 * @Assert\Email()
+	 * @Assert\MaxLength(100)
 	 */
 	protected $email;
 
 	/**
+	 * @var ArrayCollection
+	 *
 	 * @ORM\OneToMany(targetEntity="Player", mappedBy="user")
 	 */
 	protected $players;
