@@ -17,7 +17,7 @@
 	</head>
 	<body>
 		<div class="container">
-			<h1>Salvage Internet Armageddon</h1>
+			<h1>Salvage Internet Armageddon - the game</h1>
 			{% if app.session.hasFlash('notice') %}
 				<div class="center text-info">{{ app.session.flash('notice') }}</div>
 			{% endif %}
@@ -30,7 +30,9 @@
 					<nav>
 						<ul class="nav nav-list">
 							<li class="nav-header">Menu</li>
+							<li {% if menu == 'index' %}class="active"{% endif %}><a href="{{ path('index') }}">Strona główna</a></li>
 							<li {% if menu == 'users' %}class="active"{% endif %}><a href="{{ path('users') }}">Użytkownicy</a></li>
+							<li {% if menu == 'items' %}class="active"{% endif %}><a href="{{ path('items') }}">Itemy</a></li>
 						</ul>
 					</nav>
 				</aside>

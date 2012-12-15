@@ -3,6 +3,7 @@ namespace Db\DbBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -11,6 +12,18 @@ use Doctrine\Common\Collections\ArrayCollection;
 class Item extends Entity
 {
 	/**
+	 * Allowed types.
+	 */
+	const HELMET = 'helmet';
+	const BUCKLER = 'buckler';
+	const GLOVES = 'gloves';
+	const LEGGINGS = 'leggings';
+	const SWORD = 'sword';
+	const SHIELD = 'shield';
+
+	/**
+	 * @var int
+	 *
 	 * @ORM\Id
 	 * @ORM\Column(type="integer")
 	 * @ORM\GeneratedValue(strategy="AUTO")
@@ -18,62 +31,133 @@ class Item extends Entity
 	protected $id;
 
 	/**
+	 * @var string
+	 *
 	 * @ORM\Column(type="string", length=100)
+	 *
+	 * @Assert\NotBlank()
+	 * @Assert\MaxLength(100)
 	 */
 	protected $type;
 
 	/**
+	 * @var string
+	 *
 	 * @ORM\Column(type="string", length=100)
+	 *
+	 * @Assert\NotBlank()
+	 * @Assert\MaxLength(100)
 	 */
 	protected $name;
 
 	/**
+	 * @var int
+	 *
 	 * @ORM\Column(type="integer")
+	 *
+	 * @Assert\NotBlank()
+	 * @Assert\Min(0)
 	 */
-	protected $intelligence;
+	protected $intelligence = 0;
 
 	/**
+	 * @var int
+	 *
 	 * @ORM\Column(type="integer")
+	 *
+	 * @Assert\NotBlank()
+	 * @Assert\Min(0)
 	 */
-	protected $dexterity;
+	protected $dexterity = 0;
 
 	/**
+	 * @var int
+	 *
 	 * @ORM\Column(type="integer")
+	 *
+	 * @Assert\NotBlank()
+	 * @Assert\Min(0)
 	 */
-	protected $mana;
+	protected $mana = 0;
 
 	/**
+	 * @var int
+	 *
 	 * @ORM\Column(type="integer")
+	 *
+	 * @Assert\NotBlank()
+	 * @Assert\Min(0)
 	 */
-	protected $strenght;
+	protected $strength = 0;
 
 	/**
+	 * @var int
+	 *
 	 * @ORM\Column(type="integer")
+	 *
+	 * @Assert\NotBlank()
+	 * @Assert\Min(0)
 	 */
-	protected $required_intelligence;
+	protected $requiredIntelligence = 0;
 
 	/**
+	 * @var int
+	 *
 	 * @ORM\Column(type="integer")
+	 *
+	 * @Assert\NotBlank()
+	 * @Assert\Min(0)
 	 */
-	protected $required_dexterity;
+	protected $requiredDexterity = 0;
 
 	/**
+	 * @var int
+	 *
 	 * @ORM\Column(type="integer")
+	 *
+	 * @Assert\NotBlank()
+	 * @Assert\Min(0)
 	 */
-	protected $required_mana;
+	protected $requiredMana = 0;
 
 	/**
+	 * @var int
+	 *
 	 * @ORM\Column(type="integer")
+	 *
+	 * @Assert\NotBlank()
+	 * @Assert\Min(0)
 	 */
-	protected $required_strenght;
+	protected $requiredStrength = 0;
 
 	/**
+	 * @var bool
+	 *
+	 * @ORM\Column(type="boolean")
+	 */
+	protected $weared = false;
+
+	/**
+	 * @var object
+	 *
 	 * @ORM\ManyToOne(targetEntity="Player", inversedBy="item")
 	 */
 	protected $player;
 
 	/**
-	 * @ORM\Column(type="boolean")
+	 * Returns allowed types.
+	 *
+	 * @return array
 	 */
-	protected $weared = false;
+	public static function getTypes()
+	{
+		return array(
+			self::HELMET,
+			self::BUCKLER,
+			self::GLOVES,
+			self::LEGGINGS,
+			self::SWORD,
+			self::SHIELD,
+		);
+	}
 }

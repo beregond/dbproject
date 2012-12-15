@@ -60,7 +60,7 @@ class Paginator implements \Countable, \IteratorAggregate
 	 * @param bool $fetchJoinCollection = true
 	 * @return null
 	 */
-	public function __construct($query, $page = 1, $perpage = 20, $fetchJoinCollection = true)
+	public function __construct($query, $page = 1, $perpage = 10, $fetchJoinCollection = true)
 	{
 		$this->_query = $query;
 		$this->_fetchJoinCollection = $fetchJoinCollection;

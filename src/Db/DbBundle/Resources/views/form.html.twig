@@ -2,8 +2,15 @@
 
 {% block body %}
 	<h2>{{ title }}</h2>
-	<form method="post">
+	<form id="editform" method="post">
 		{{ form_rest(form) }}
-		<input class="btn btn-success" type="submit" value="Zapisz" />
 	</form>
+	<input form="editform" class="btn btn-success" type="submit" value="Zapisz" />
+	<a class="btn btn-info" href="{{ path(backurl, parameters) }}">Powrót</a>
+	{% if deleteurl is defined %}
+		<form class="inline-block form-inline form-confirmation" action="{{ path(deleteurl, deleteparameters) }}" method="post">
+		<input class="btn btn-danger" type="submit" value="Usuń" />
+		<span>{{ form_label(deleteform.confirmation) }} {{ form_widget(deleteform.confirmation, {'attr': {'class': 'confirmation'}}) }}</span>
+		{{ form_rest(deleteform) }}
+	{% endif %}
 {% endblock %}

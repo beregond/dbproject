@@ -24,17 +24,20 @@
 			<td>{{ user.email }}</td>
 			<td>
 				<div class="btn-group">
-					<a class="btn" data-hover="btn-primary" href="{{ path('edituser', {'user': user.id}) }}">Edytuj</a>
+					<a class="btn" data-hover="btn-primary" href="{{ path('edituser', parameters | merge({'user': user.id})) }}">Edytuj</a>
 				</div>
 			</td>
 			<td>
-				<form class="form-inline form-confirmation" action="{{ path('deleteuser', {'user': user.id}) }}" method="post" title="Na pewno usunąć użytkownika?">
+				<form class="form-inline form-confirmation" action="{{ path('deleteuser', parameters | merge({'user': user.id})) }}" method="post" title="Na pewno usunąć użytkownika?">
 					{{ deleteform }}
 				</form>
 			</td>
 		</tr>
 		{% if loop.last %}
 			</table>
+			<div class="center">
+				{% include "DbBundle::pagination.html.twig" with {'numeration': users.getNumeration(), 'path': 'users'} %}
+			</div>
 		{% endif %}
 	{% else %}
 		<div class="center">Brak rekordów</div>

@@ -24,7 +24,7 @@ class DefaultController extends Controller
 	 */
 	public function indexAction(Request $requst)
 	{
-		return array();
+		return array('menu' => 'index');
 	}
 
 	/**
@@ -52,12 +52,13 @@ class DefaultController extends Controller
 		$view['users'] = $users;
 
 		$view['deleteform'] = $this->createForm(new DeleteType())->createView();
+		$view['parameters'] = $request->query->all();
 
 		return $view;
 	}
 
 	/**
-	 * Adding user.
+	 * Add user.
 	 *
 	 * @Route("/adduser", name="adduser")
 	 * @Template("DbBundle::form.html.twig")
@@ -84,7 +85,7 @@ class DefaultController extends Controller
 	public function editUserAction(Request $request, $user)
 	{
 		if (!$user = $this->getDoctrine()->getRepository('DbBundle:User')->find($user)) {
-			return $this->redirect($this->generateUrl("users"));
+			return $this->redirect($this->generateUrl('users'));
 		}
 
 		return $this->userAction($request, $user, true);
@@ -119,12 +120,21 @@ class DefaultController extends Controller
 
 				$this->get('session')->setFlash('notice', 'Zapisano zmiany.');
 
-				return $this->redirect($this->generateUrl("users"));
+				return $this->redirect($this->generateUrl('users', $request->query->all()));
 			}
 		}
 
 		$view['form'] = $form->createView();
+		$view['backurl'] = 'users';
+		$view['parameters'] = $request->query->all();
 		$view['title'] = $edit ? "Edycja użytkownika {$user->getName()} {$user->getSurname()}" : "Dodaj nowego użytkownika";
+
+		if ($edit) {
+			$view['deleteurl'] = 'deleteuser';
+			$view['deleteform'] = $this->createForm(new DeleteType())->createView();
+			$view['deleteparameters'] = $view['parameters'];
+			$view['deleteparameters']['user'] = $user->getId();
+		}
 
 		return $view;
 	}
@@ -152,6 +162,153 @@ class DefaultController extends Controller
 				$this->get('session')->setFlash('notice', 'Zapisano zmiany.');
 			}
 		}
-		return $this->redirect($this->generateUrl("users"));
+		return $this->redirect($this->generateUrl('users'));
+	}
+
+	/**
+	 * Show list of items.
+	 *
+	 * @Route("/items", name="items")
+	 * @Template()
+	 *
+	 * @param Request $request
+	 * @return array
+	 */
+	public function itemsAction(Request $request)
+	{
+		$view = array('menu' => 'items');
+
+		$items = $this
+			->getDoctrine()
+			->getEntityManager()
+			->createQueryBuilder()
+			->select('i')
+			->from('DbBundle:Item', 'i')
+			->orderBy('i.id')
+		;
+
+		$items = new Paginator($items);
+		$items->page($request->get('page', 1));
+		$view['items'] = $items;
+
+		$view['deleteform'] = $this->createForm(new DeleteType())->createView();
+		$view['parameters'] = $request->query->all();
+
+		return $view;
+	}
+
+	/**
+	 * Add item.
+	 *
+	 * @Route("/additem", name="additem")
+	 * @Template("DbBundle::form.html.twig")
+	 *
+	 * @param Request $request
+	 * @return array|RedirectResponse
+	 */
+	public function addItemAction(Request $request)
+	{
+		$item = new Entity\Item();
+		return $this->itemAction($request, $item);
+	}
+
+	/**
+	 * Edit item.
+	 *
+	 * @Route("/item/{item}", name="edititem")
+	 * @Template("DbBundle::form.html.twig")
+	 *
+	 * @param Request $request
+	 * @param int $item
+	 * @return array|RedirectResponse
+	 */
+	public function editItemAction(Request $request, $item)
+	{
+		if (!$item = $this->getDoctrine()->getRepository('DbBundle:Item')->find($item)) {
+			return $this->redirect($this->generateUrl('items'));
+		}
+
+		return $this->itemAction($request, $item, true);
+	}
+
+	/**
+	 * General method to add and edit item.
+	 *
+	 * @param Request $request
+	 * @param Entity\Item $item
+	 * @param bool $edit
+	 * @return array|RedirectResponse
+	 */
+	private function itemAction(Request $request, Entity\Item $item, $edit = false)
+	{
+		$view = array('menu' => 'items');
+
+		$form = $this
+			->createFormBuilder($item)
+			->add('type', 'choice', array('choices' => array_combine(Entity\Item::getTypes(), Entity\Item::getTypes())))
+			->add('name', 'text', array('label' => 'Nazwa'))
+			->add('intelligence', 'number', array('label' => 'Inteligencja'))
+			->add('requiredIntelligence', 'number', array('label' => 'Wymagana inteligencja'))
+			->add('dexterity', 'number', array('label' => 'Zręczność'))
+			->add('requiredDexterity', 'number', array('label' => 'Wymagana zręczność'))
+			->add('mana', 'number', array('label' => 'Mana'))
+			->add('requiredMana', 'number', array('label' => 'Wymagana mana'))
+			->add('strength', 'number', array('label' => 'Siła'))
+			->add('requiredStrength', 'number', array('label' => 'Wymagana siła'))
+			->getForm()
+		;
+
+		if ($request->isMethod('POST')) {
+			$form->bindRequest($request);
+			if ($form->isValid()) {
+				$em = $this->getDoctrine()->getEntityManager();
+				$em->persist($item);
+				$em->flush();
+
+				$this->get('session')->setFlash('notice', 'Zapisano zmiany.');
+
+				return $this->redirect($this->generateUrl('items', $request->query->all()));
+			}
+		}
+
+		$view['form'] = $form->createView();
+		$view['backurl'] = 'items';
+		$view['parameters'] = $request->query->all();
+		$view['title'] = $edit ? "Edycja itemu {$item->getName()}" : "Dodaj nowy item";
+
+		if ($edit) {
+			$view['deleteurl'] = 'deleteitem';
+			$view['deleteform'] = $this->createForm(new DeleteType())->createView();
+			$view['deleteparameters'] = $view['parameters'];
+			$view['deleteparameters']['item'] = $item->getId();
+		}
+
+		return $view;
+	}
+
+	/**
+	 * Delete item.
+	 *
+	 * @Route("/deleteitem/{item}", name="deleteitem")
+	 * @Method({"POST"})
+	 *
+	 * @param Request $request
+	 * @param int $item
+	 * @return RedirectResponse
+	 */
+	public function deleteItemAction(Request $request, $item)
+	{
+		if ($item = $this->getDoctrine()->getRepository('DbBundle:Item')->find($item)) {
+			$form = $this->createForm(new DeleteType());
+			$form->bindRequest($request);
+			if ($form->isValid()) {
+				$em = $this->getDoctrine()->getEntityManager();
+				$em->remove($item);
+				$em->flush();
+
+				$this->get('session')->setFlash('notice', 'Zapisano zmiany.');
+			}
+		}
+		return $this->redirect($this->generateUrl('items'));
 	}
 }

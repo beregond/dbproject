@@ -1,0 +1,52 @@
+{% extends "DbBundle::base.html.twig" %}
+
+{% block body %}
+	<h2>Użytkownicy</h2>
+	{% for item in items %}
+		{% if loop.first %}
+			{% set deleteform %}
+				{% include "DbBundle::deleteform.html.twig" with {'deleteform': deleteform} %}
+			{% endset %}
+			<table class="table table-stripped">
+				<tr>
+					<th>Id</th>
+					<th>Nazwa</th>
+					<th>Typ</th>
+					<th>Inteligencja</th>
+					<th>Zręczność</th>
+					<th>Mana</th>
+					<th>Siła</th>
+					<th>Akcje</th>
+					<th>Usuń</th>
+				</tr>
+		{% endif %}
+		<tr>
+			<td>{{ item.id }}</td>
+			<td>{{ item.name }}</td>
+			<td>{{ item.type }}</td>
+			<td>{{ item.intelligence}}/{{ item.requiredIntelligence }}</td>
+			<td>{{ item.dexterity }}/{{ item.requiredDexterity }}</td>
+			<td>{{ item.mana }}/{{ item.requiredMana }}</td>
+			<td>{{ item.strength }}/{{ item.requiredStrength }}</td>
+			<td>
+				<div class="btn-group">
+					<a class="btn" data-hover="btn-primary" href="{{ path('edititem', parameters | merge({'item': item.id})) }}">Edytuj</a>
+				</div>
+			</td>
+			<td>
+				<form class="form-inline form-confirmation" action="{{ path('deleteitem', {'item': item.id}) }}" method="post" title="Na pewno usunąć item?">
+					{{ deleteform }}
+				</form>
+			</td>
+		</tr>
+		{% if loop.last %}
+			</table>
+			<div class="center">
+				{% include "DbBundle::pagination.html.twig" with {'numeration': items.getNumeration(), 'path': 'items'} %}
+			</div>
+		{% endif %}
+	{% else %}
+		<div class="center">Brak rekordów</div>
+	{% endfor %}
+	<a class="btn btn-inverse" href="{{ path('additem') }}">Dodaj item</a>
+{% endblock %}

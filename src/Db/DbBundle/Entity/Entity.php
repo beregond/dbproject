@@ -25,7 +25,7 @@ abstract class Entity
 		}
 
 		if (preg_match('/^set/', $method)) {
-			$prop = strtolower(preg_replace('/^set/', '', $method));
+			$prop = lcfirst(preg_replace('/^set/', '', $method));
 
 			if ($this->$prop instanceof ArrayCollection) {
 				throw new \Exception('You can\'t overwrite "'.$prop.'" property.');
@@ -33,7 +33,7 @@ abstract class Entity
 
 			$this->$prop = array_shift($arguments);
 		} elseif (preg_match('/^get/', $method)) {
-			$prop = strtolower(preg_replace('/^get/', '', $method));
+			$prop = lcfirst(preg_replace('/^get/', '', $method));
 			return $this->$prop;
 		} else {
 			$vars = array_keys(get_object_vars($this));
