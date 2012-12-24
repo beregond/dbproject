@@ -311,4 +311,132 @@ class DefaultController extends Controller
 		}
 		return $this->redirect($this->generateUrl('items'));
 	}
+
+	/**
+	 * Show list of players.
+	 *
+	 * @Route("/players", name="players")
+	 * @Template()
+	 *
+	 * @param Request $request
+	 * @return array
+	 */
+	public function playersAction(Request $request)
+	{
+		$view = array('menu' => 'players');
+
+		$players = $this
+			->getDoctrine()
+			->getEntityManager()
+			->createQueryBuilder()
+			->select('p')
+			->from('DbBundle:Player', 'p')
+			->orderBy('p.id')
+		;
+
+		$players = new Paginator($players);
+		$players->page($request->get('page', 1));
+		$view['players'] = $players;
+
+		$view['deleteform'] = $this->createForm(new DeleteType())->createView();
+		$view['parameters'] = $request->query->all();
+
+		return $view;
+	}
+
+	/**
+	 * Add player.
+	 *
+	 * @Route("/addplayer", name="addplayer")
+	 * @Template("DbBundle::form.html.twig")
+	 *
+	 * @param Request $request
+	 * @return array|RedirectResponse
+	 */
+	public function addPlayerAction(Request $request)
+	{
+		$player = new Entity\Player();
+		return $this->playerAction($request, $player);
+	}
+
+	/**
+	 * Edit player.
+	 *
+	 * @Route("/player/{player}", name="editplayer")
+	 * @Template("DbBundle::form.html.twig")
+	 */
+	public function editPlayerAction(Request $request, $player)
+	{
+		if (!$player = $this->getDoctrine()->getRepository('DbBundle:Player')->find($player)) {
+			return $this->redirect($this->generateUrl('players'));
+		}
+
+		return $this->playerAction($request, $player, true);
+	}
+
+	/**
+	 * General method to add and edit player.
+	 *
+	 * @param Request $request
+	 * @param Entity\Player $player
+	 * @param bool $edit
+	 * @return array|RedirectResponse
+	 */
+	public function playerAction(Request $request, $player, $edit = false)
+	{
+		$view = array('menu' => 'players');
+
+		$form = $this
+			->createFormBuilder($player)
+			->add('name', 'text', array('label' => 'Imię postaci'))
+			->add('mana', 'number', array('label' => 'Mana'))
+			->add('intelligence', 'number', array('label' => 'Inteligencja'))
+			->add('dexterity', 'number', array('label' => 'Zręczność'))
+			->add('strenght', 'number', array('label' => 'Siła'))
+			->add('experience_points', 'number', array('label' => 'Liczba punktów doświadczenia'))
+			->getForm()
+		;
+
+		if ($request->isMethod('POST')) {
+			$form->bindRequest($request);
+			if ($form->isValid()) {
+				$em = $this->getDoctrine()->getEntityManager();
+				$em->persist($player);
+				$em->flush();
+
+				$this->get('session')->setFlash('notice', 'Zapisano zmiany.');
+
+				return $this->redirect($this->generateUrl('players', $request->query->all()));
+			}
+		}
+
+		$view['form'] = $form->createView();
+		$view['backurl'] = 'players';
+		$view['parameters'] = $request->query->all();
+		$view['title'] = $edit ? "Edycja gracza {$player->getName()}" : "Dodaj nowego gracza";
+
+		if ($edit) {
+			$view['deleteurl'] = 'deleteplayer';
+			$view['deleteform'] = $this->createForm(new DeleteType())->createView();
+			$view['deleteparameters'] = $view['parameters'];
+			$view['deleteparameters']['player'] = $player->getId();
+		}
+
+		return $view;
+	}
+
+	/**
+	 * Delete player.
+	 *
+	 * @Route("/deleteplayer/{player}", name="deleteplayer")
+	 * @Method({"POST"})
+	 *
+	 * @param Request $request
+	 * @param int $player
+	 * @return RedirectResponse
+	 */
+	public function deletePlayerAction(Request $request, $player)
+	{
+
+	}
 }

@@ -1,0 +1,42 @@
+{% extends "DbBundle::base.html.twig" %}
+
+{% block body %}
+	<h2>Gracze</h2>
+	{% for player in players %}
+		{% if loop.first %}
+			{% set deleteform %}
+				{% include "DbBundle::deleteform.html.twig" with {'deleteform': deleteform} %}
+			{% endset %}
+			<table class="table table-stripped">
+				<tr>
+					<th>Id</th>
+					<th>Nazwa</th>
+					<th>Akcje</th>
+					<th>Usuń</th>
+				</tr>
+		{% endif %}
+		<tr>
+			<td>{{ player.id }}</td>
+			<td>{{ player.name }}</td>
+			<td>
+				<div class="btn-group">
+					<a class="btn" href="{{ path('editplayer', parameters | merge({'player': player.id})) }}">Edytuj</a>
+				</div>
+			</td>
+			<td>
+				<form class="form-inline form-confirmation" action="{{ path('deleteplayer', {'player': player.id}) }}" method="post" title="Na pewno usunąć player?">
+					{{ deleteform }}
+				</form>
+			</td>
+		</tr>
+		{% if loop.last %}
+			</table>
+			<div class="center">
+				{% include "DbBundle::pagination.html.twig" with {'numeration': players.getNumeration(), 'path': 'players'} %}
+			</div>
+		{% endif %}
+	{% else %}
+		<div class="center">Brak rekordów</div>
+	{% endfor %}
+	<a class="btn btn-inverse" href="{{ path('addplayer') }}">Dodaj gracza</a>
+{% endblock %}

@@ -34,6 +34,9 @@ abstract class Entity
 			$this->$prop = array_shift($arguments);
 		} elseif (preg_match('/^get/', $method)) {
 			$prop = lcfirst(preg_replace('/^get/', '', $method));
+			if (!property_exists(get_class($this), $prop)) {
+				throw new \Exception(sprintf('There\'s no property named "%s"'));
+			}
 			return $this->$prop;
 		} else {
 			$vars = array_keys(get_object_vars($this));

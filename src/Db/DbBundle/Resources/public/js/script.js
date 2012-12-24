@@ -2,7 +2,6 @@ document.addEventListener('DOMContentLoaded', init);
 
 function init() {
 	initConfirmationForms();
-	initAnimatedButtons();
 }
 
 function initConfirmationForms() {
@@ -29,28 +28,4 @@ function confirmationFormSubmit() {
 	}
 
 	return false;
-}
-
-function initAnimatedButtons() {
-	var buttons = document.querySelectorAll(".btn");
-	for (var i = 0; i < buttons.length; i++) {
-		if (buttons[i].dataset.hover) {
-			buttons[i].addEventListener('mouseover', animatedButtonOn);
-			buttons[i].addEventListener('mouseout', animatedButtonOff);
-		}
-	}
-}
-
-function animatedButtonOn() {
-	classes = this.dataset.hover.split(' ');
-	for (className in classes) {
-		this.classList.add(classes[className]);
-	}
-}
-
-function animatedButtonOff() {
-	classes = this.dataset.hover.split(' ');
-	for (className in classes) {
-		this.classList.remove(classes[className]);
-	}
 }

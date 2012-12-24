@@ -4,6 +4,7 @@ namespace Db\DbBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
@@ -14,6 +15,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 class Player extends Entity
 {
 	/**
+	 * @var int
+	 *
 	 * @ORM\Id
 	 * @ORM\Column(type="integer")
 	 * @ORM\GeneratedValue(strategy="AUTO")
@@ -21,56 +24,83 @@ class Player extends Entity
 	protected $id;
 
 	/**
+	 * @var string
+	 *
 	 * @ORM\Column(type="string", length=100, unique=true)
+	 *
+	 * @Assert\NotBlank()
+	 * @Assert\MinLength(3)
+	 * @Assert\MaxLength(100)
+	 * @Assert\Regex("/^[\w]*$/")
 	 */
 	protected $name;
 
 	/**
+	 * @var int
+	 *
 	 * @ORM\Column(type="integer")
 	 */
 	protected $mana;
 
 	/**
+	 * @var int
+	 *
 	 * @ORM\Column(type="integer")
 	 */
 	protected $intelligence;
 
 	/**
+	 * @var int
+	 *
 	 * @ORM\Column(type="integer")
 	 */
 	protected $experience_points;
 
 	/**
+	 * @var int
+	 *
 	 * @ORM\Column(type="integer")
 	 */
 	protected $dexterity;
 
 	/**
+	 * @var int
+	 *
 	 * @ORM\Column(type="integer")
 	 */
 	protected $strenght;
 
 	/**
+	 * @var int
+	 *
 	 * @ORM\ManyToOne(targetEntity="User", inversedBy="player")
 	 */
 	protected $user;
 
 	/**
+	 * @var ArrayCollection
+	 *
 	 * @ORM\OneToMany(targetEntity="Item", mappedBy="player")
 	 */
 	protected $item;
 
 	/**
+	 * @var UserClass
+	 *
 	 * @ORM\ManyToOne(targetEntity="UserClass", inversedBy="Player")
 	 */
 	protected $class;
 
 	/**
+	 * @var Race
+	 *
 	 * @ORM\ManyToOne(targetEntity="Race", inversedBy="Player")
 	 */
 	protected $race;
 
 	/**
+	 * @var ArrayCollection
+	 *
 	 * @ORM\ManyToMany(targetEntity="Quest", mappedBy="Player")
 	 */
 	protected $quest;
