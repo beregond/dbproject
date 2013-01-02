@@ -20,10 +20,6 @@ abstract class Entity
 	 */
 	public function __call($method, $arguments)
 	{
-		if(method_exists($this, $method)) {
-			return call_user_func_array(array($this, $method), $arguments);
-		}
-
 		if (preg_match('/^set/', $method)) {
 			$prop = lcfirst(preg_replace('/^set/', '', $method));
 
@@ -35,7 +31,7 @@ abstract class Entity
 		} elseif (preg_match('/^get/', $method)) {
 			$prop = lcfirst(preg_replace('/^get/', '', $method));
 			if (!property_exists(get_class($this), $prop)) {
-				throw new \Exception(sprintf('There\'s no property named "%s"'));
+				throw new \Exception(sprintf('There\'s no property named "%s"', $prop));
 			}
 			return $this->$prop;
 		} else {

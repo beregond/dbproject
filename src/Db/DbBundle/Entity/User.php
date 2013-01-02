@@ -68,4 +68,14 @@ class User extends Entity
 	{
 		$this->players = new ArrayCollection();
 	}
+
+	/**
+	 * Stringify.
+	 *
+	 * @return string
+	 */
+	public function __toString()
+	{
+		return $this->getName();
+	}
 }

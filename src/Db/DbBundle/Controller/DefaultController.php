@@ -388,7 +388,10 @@ class DefaultController extends Controller
 
 		$form = $this
 			->createFormBuilder($player)
+			->add('user', 'entity', array('label' => 'Użytkownik', 'class' => 'DbBundle:User'))
 			->add('name', 'text', array('label' => 'Imię postaci'))
+			->add('class', 'entity', array('label' => 'Klasa', 'class' => 'DbBundle:UserClass'))
+			->add('race', 'entity', array('label' => 'Rasa', 'class' => 'DbBundle:Race'))
 			->add('mana', 'number', array('label' => 'Mana'))
 			->add('intelligence', 'number', array('label' => 'Inteligencja'))
 			->add('dexterity', 'number', array('label' => 'Zręczność'))
@@ -437,6 +440,17 @@ class DefaultController extends Controller
 	 */
 	public function deletePlayerAction(Request $request, $player)
 	{
+		if ($player = $this->getDoctrine()->getRepository('DbBundle:Player')->find($player)) {
+			$form = $this->createForm(new DeleteType());
+			$form->bindRequest($request);
+			if ($form->isValid()) {
+				$em = $this->getDoctrine()->getEntityManager();
+				$em->remove($player);
+				$em->flush();
 
+				$this->get('session')->setFlash('notice', 'Zapisano zmiany.');
+			}
+		}
+		return $this->redirect($this->generateUrl('players'));
 	}
 }

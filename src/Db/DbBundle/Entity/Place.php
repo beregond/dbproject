@@ -18,11 +18,6 @@ class Place extends Entity
 	protected $id;
 
 	/**
-	 * @ORM\OneToOne(targetEntity="Place", mappedBy="user")
-	 */
-	protected $user;
-
-	/**
 	 * @ORM\OneToMany(targetEntity="NPC", mappedBy="Place")
 	 */
 	protected $npc;

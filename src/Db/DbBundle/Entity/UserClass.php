@@ -44,11 +44,6 @@ class UserClass extends Entity
 	protected $strenght;
 
 	/**
-	 * @ORM\OneToMany(targetEntity="Player", mappedBy="Class")
-	 */
-	protected $players;
-
-	/**
 	 * Constructor.
 	 */
 	public function __construct()
