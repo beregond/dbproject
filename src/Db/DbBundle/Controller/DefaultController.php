@@ -453,4 +453,142 @@ class DefaultController extends Controller
 		}
 		return $this->redirect($this->generateUrl('players'));
 	}
+
+	/**
+	 * Show list of races.
+	 *
+	 * @Route("/races", name="races")
+	 * @Template()
+	 *
+	 * @param Request $request
+	 * @return array
+	 */
+	public function racesAction(Request $request)
+	{
+		$view = array('menu' => 'races');
+
+		$races = $this
+			->getDoctrine()
+			->getEntityManager()
+			->createQueryBuilder()
+			->select('i')
+			->from('DbBundle:Race', 'i')
+			->orderBy('i.id')
+		;
+
+		$races = new Paginator($races);
+		$races->page($request->get('page', 1));
+		$view['races'] = $races;
+
+		$view['deleteform'] = $this->createForm(new DeleteType())->createView();
+		$view['parameters'] = $request->query->all();
+
+		return $view;
+	}
+
+	/**
+	 * Add race.
+	 *
+	 * @Route("/addrace", name="addrace")
+	 * @Template("DbBundle::form.html.twig")
+	 *
+	 * @param Request $request
+	 * @return array|RedirectResponse
+	 */
+	public function addRaceAction(Request $request)
+	{
+		$race = new Entity\Race();
+		return $this->raceAction($request, $race);
+	}
+
+	/**
+	 * Edit race.
+	 *
+	 * @Route("/race/{race}", name="editrace")
+	 * @Template("DbBundle::form.html.twig")
+	 */
+	public function editRaceAction(Request $request, $race)
+	{
+		if (!$race = $this->getDoctrine()->getRepository('DbBundle:Player')->find($race)) {
+			return $this->redirect($this->generateUrl('players'));
+		}
+
+		return $this->raceAction($request, $race, true);
+	}
+
+	/**
+	 * General method to add and edit race.
+	 *
+	 * @param Request $request
+	 * @param Entity\Player $race
+	 * @param bool $edit
+	 * @return array|RedirectResponse
+	 */
+	public function raceAction(Request $request, $race, $edit = false)
+	{
+		$view = array('menu' => 'races');
+
+		$form = $this
+			->createFormBuilder($race)
+			->add('name', 'text', array('label' => 'Nazwa klasy'))
+			->add('dexterity', 'number', array('label' => 'Zręczność'))
+			->add('intelligence', 'number', array('label' => 'Inteligencja'))
+			->add('mana', 'number', array('label' => 'Mana'))
+			->add('strenght', 'number', array('label' => 'Siła'))
+			->getForm()
+		;
+
+		if ($request->isMethod('POST')) {
+			$form->bindRequest($request);
+			if ($form->isValid()) {
+				$em = $this->getDoctrine()->getEntityManager();
+				$em->persist($race);
+				$em->flush();
+
+				$this->get('session')->setFlash('notice', 'Zapisano zmiany.');
+
+				return $this->redirect($this->generateUrl('races', $request->query->all()));
+			}
+		}
+
+		$view['form'] = $form->createView();
+		$view['backurl'] = 'races';
+		$view['parameters'] = $request->query->all();
+		$view['title'] = $edit ? "Edycja rasę {$race->getName()}" : "Dodaj nową rasę";
+
+		if ($edit) {
+			$view['deleteurl'] = 'deleterace';
+			$view['deleteform'] = $this->createForm(new DeleteType())->createView();
+			$view['deleteparameters'] = $view['parameters'];
+			$view['deleteparameters']['race'] = $race->getId();
+		}
+
+		return $view;
+	}
+
+	/**
+	 * Delete race.
+	 *
+	 * @Route("/deleterace/{race}", name="deleterace")
+	 * @Method({"POST"})
+	 *
+	 * @param Request $request
+	 * @param int $race
+	 * @return RedirectResponse
+	 */
+	public function deleteRaceAction(Request $request, $race)
+	{
+		if ($race = $this->getDoctrine()->getRepository('DbBundle:Race')->find($race)) {
+			$form = $this->createForm(new DeleteType());
+			$form->bindRequest($request);
+			if ($form->isValid()) {
+				$em = $this->getDoctrine()->getEntityManager();
+				$em->remove($race);
+				$em->flush();
+
+				$this->get('session')->setFlash('notice', 'Zapisano zmiany.');
+			}
+		}
+		return $this->redirect($this->generateUrl('players'));
+	}
 }

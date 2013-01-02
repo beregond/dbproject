@@ -1,0 +1,50 @@
+{% extends "DbBundle::base.html.twig" %}
+
+{% block body %}
+	<h2>Użytkownicy</h2>
+	{% for race in races %}
+		{% if loop.first %}
+			{% set deleteform %}
+				{% include "DbBundle::deleteform.html.twig" with {'deleteform': deleteform} %}
+			{% endset %}
+			<table class="table table-stripped">
+				<tr>
+					<th>Id</th>
+					<th>Nazwa</th>
+					<th>Zręczność</th>
+					<th>Inteligencja</th>
+					<th>Mana</th>
+					<th>Siła</th>
+					<th>Akcje</th>
+					<th>Usuń</th>
+				</tr>
+		{% endif %}
+		<tr>
+			<td>{{ race.id }}</td>
+			<td>{{ race.name }}</td>
+			<td>{{ race.dexterity }}</td>
+			<td>{{ race.intelligence}}</td>
+			<td>{{ race.mana }}</td>
+			<td>{{ race.strength }}</td>
+			<td>
+				<div class="btn-group">
+					<a class="btn" href="{{ path('editrace', parameters | merge({'race': race.id})) }}">Edytuj</a>
+				</div>
+			</td>
+			<td>
+				<form class="form-inline form-confirmation" action="{{ path('deleterace', {'race': race.id}) }}" method="post" title="Na pewno usunąć rasę?">
+					{{ deleteform }}
+				</form>
+			</td>
+		</tr>
+		{% if loop.last %}
+			</table>
+			<div class="center">
+				{% include "DbBundle::pagination.html.twig" with {'numeration': races.getNumeration(), 'path': 'races'} %}
+			</div>
+		{% endif %}
+	{% else %}
+		<div class="center">Brak rekordów</div>
+	{% endfor %}
+	<a class="btn btn-inverse" href="{{ path('addrace') }}">Dodaj rasę</a>
+{% endblock %}
