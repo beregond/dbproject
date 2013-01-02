@@ -395,7 +395,7 @@ class DefaultController extends Controller
 			->add('mana', 'number', array('label' => 'Mana'))
 			->add('intelligence', 'number', array('label' => 'Inteligencja'))
 			->add('dexterity', 'number', array('label' => 'Zręczność'))
-			->add('strenght', 'number', array('label' => 'Siła'))
+			->add('strength', 'number', array('label' => 'Siła'))
 			->add('experience_points', 'number', array('label' => 'Liczba punktów doświadczenia'))
 			->getForm()
 		;
@@ -509,7 +509,7 @@ class DefaultController extends Controller
 	 */
 	public function editRaceAction(Request $request, $race)
 	{
-		if (!$race = $this->getDoctrine()->getRepository('DbBundle:Player')->find($race)) {
+		if (!$race = $this->getDoctrine()->getRepository('DbBundle:Race')->find($race)) {
 			return $this->redirect($this->generateUrl('players'));
 		}
 
@@ -534,7 +534,7 @@ class DefaultController extends Controller
 			->add('dexterity', 'number', array('label' => 'Zręczność'))
 			->add('intelligence', 'number', array('label' => 'Inteligencja'))
 			->add('mana', 'number', array('label' => 'Mana'))
-			->add('strenght', 'number', array('label' => 'Siła'))
+			->add('strength', 'number', array('label' => 'Siła'))
 			->getForm()
 		;
 
@@ -554,7 +554,7 @@ class DefaultController extends Controller
 		$view['form'] = $form->createView();
 		$view['backurl'] = 'races';
 		$view['parameters'] = $request->query->all();
-		$view['title'] = $edit ? "Edycja rasę {$race->getName()}" : "Dodaj nową rasę";
+		$view['title'] = $edit ? "Edycja rasy {$race->getName()}" : "Dodaj nową rasę";
 
 		if ($edit) {
 			$view['deleteurl'] = 'deleterace';
@@ -590,5 +590,143 @@ class DefaultController extends Controller
 			}
 		}
 		return $this->redirect($this->generateUrl('players'));
+	}
+
+	/**
+	 * Show list of classes.
+	 *
+	 * @Route("/classes", name="classes")
+	 * @Template()
+	 *
+	 * @param Request $request
+	 * @return array
+	 */
+	public function classesAction(Request $request)
+	{
+		$view = array('menu' => 'classes');
+
+		$classes = $this
+			->getDoctrine()
+			->getEntityManager()
+			->createQueryBuilder()
+			->select('i')
+			->from('DbBundle:UserClass', 'i')
+			->orderBy('i.id')
+		;
+
+		$classes = new Paginator($classes);
+		$classes->page($request->get('page', 1));
+		$view['classes'] = $classes;
+
+		$view['deleteform'] = $this->createForm(new DeleteType())->createView();
+		$view['parameters'] = $request->query->all();
+
+		return $view;
+	}
+
+	/**
+	 * Add class.
+	 *
+	 * @Route("/addclass", name="addclass")
+	 * @Template("DbBundle::form.html.twig")
+	 *
+	 * @param Request $request
+	 * @return array|RedirectResponse
+	 */
+	public function addClassAction(Request $request)
+	{
+		$class = new Entity\UserClass();
+		return $this->classAction($request, $class);
+	}
+
+	/**
+	 * Edit race.
+	 *
+	 * @Route("/class/{class}", name="editclass")
+	 * @Template("DbBundle::form.html.twig")
+	 */
+	public function editClassAction(Request $request, $class)
+	{
+		if (!$class = $this->getDoctrine()->getRepository('DbBundle:UserClass')->find($class)) {
+			return $this->redirect($this->generateUrl('classes'));
+		}
+
+		return $this->classAction($request, $class, true);
+	}
+
+	/**
+	 * General method to add and edit class.
+	 *
+	 * @param Request $request
+	 * @param Entity\Player $class
+	 * @param bool $edit
+	 * @return array|RedirectResponse
+	 */
+	public function classAction(Request $request, $class, $edit = false)
+	{
+		$view = array('menu' => 'classes');
+
+		$form = $this
+			->createFormBuilder($class)
+			->add('name', 'text', array('label' => 'Nazwa klasy'))
+			->add('dexterity', 'number', array('label' => 'Zręczność'))
+			->add('intelligence', 'number', array('label' => 'Inteligencja'))
+			->add('mana', 'number', array('label' => 'Mana'))
+			->add('strength', 'number', array('label' => 'Siła'))
+			->getForm()
+		;
+
+		if ($request->isMethod('POST')) {
+			$form->bindRequest($request);
+			if ($form->isValid()) {
+				$em = $this->getDoctrine()->getEntityManager();
+				$em->persist($class);
+				$em->flush();
+
+				$this->get('session')->setFlash('notice', 'Zapisano zmiany.');
+
+				return $this->redirect($this->generateUrl('classes', $request->query->all()));
+			}
+		}
+
+		$view['form'] = $form->createView();
+		$view['backurl'] = 'classes';
+		$view['parameters'] = $request->query->all();
+		$view['title'] = $edit ? "Edycja klasy {$class->getName()}" : "Dodaj nową klasę";
+
+		if ($edit) {
+			$view['deleteurl'] = 'deleterace';
+			$view['deleteform'] = $this->createForm(new DeleteType())->createView();
+			$view['deleteparameters'] = $view['parameters'];
+			$view['deleteparameters']['class'] = $class->getId();
+		}
+
+		return $view;
+	}
+
+	/**
+	 * Delete class.
+	 *
+	 * @Route("/deleterace/{class}", name="deleteclass")
+	 * @Method({"POST"})
+	 *
+	 * @param Request $request
+	 * @param int $class
+	 * @return RedirectResponse
+	 */
+	public function deleteClassAction(Request $request, $class)
+	{
+		if ($class = $this->getDoctrine()->getRepository('DbBundle:UserClass')->find($class)) {
+			$form = $this->createForm(new DeleteType());
+			$form->bindRequest($request);
+			if ($form->isValid()) {
+				$em = $this->getDoctrine()->getEntityManager();
+				$em->remove($class);
+				$em->flush();
+
+				$this->get('session')->setFlash('notice', 'Zapisano zmiany.');
+			}
+		}
+		return $this->redirect($this->generateUrl('classes'));
 	}
 }

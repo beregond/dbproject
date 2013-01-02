@@ -1,8 +1,8 @@
 {% extends "DbBundle::base.html.twig" %}
 
 {% block body %}
-	<h2>Rasy</h2>
-	{% for race in races %}
+	<h2>Klasy</h2>
+	{% for class in classes %}
 		{% if loop.first %}
 			{% set deleteform %}
 				{% include "DbBundle::deleteform.html.twig" with {'deleteform': deleteform} %}
@@ -20,19 +20,19 @@
 				</tr>
 		{% endif %}
 		<tr>
-			<td>{{ race.id }}</td>
-			<td>{{ race.name }}</td>
-			<td>{{ race.dexterity }}</td>
-			<td>{{ race.intelligence}}</td>
-			<td>{{ race.mana }}</td>
-			<td>{{ race.strength }}</td>
+			<td>{{ class.id }}</td>
+			<td>{{ class.name }}</td>
+			<td>{{ class.dexterity }}</td>
+			<td>{{ class.intelligence}}</td>
+			<td>{{ class.mana }}</td>
+			<td>{{ class.strength }}</td>
 			<td>
 				<div class="btn-group">
-					<a class="btn" href="{{ path('editrace', parameters | merge({'race': race.id})) }}">Edytuj</a>
+					<a class="btn" href="{{ path('editclass', parameters | merge({'class': class.id})) }}">Edytuj</a>
 				</div>
 			</td>
 			<td>
-				<form class="form-inline form-confirmation" action="{{ path('deleterace', {'race': race.id}) }}" method="post" title="Na pewno usunąć rasę?">
+				<form class="form-inline form-confirmation" action="{{ path('deleteclass', {'class': class.id}) }}" method="post" title="Na pewno usunąć klasę?">
 					{{ deleteform }}
 				</form>
 			</td>
@@ -40,11 +40,11 @@
 		{% if loop.last %}
 			</table>
 			<div class="center">
-				{% include "DbBundle::pagination.html.twig" with {'numeration': races.getNumeration(), 'path': 'races'} %}
+				{% include "DbBundle::pagination.html.twig" with {'numeration': classes.getNumeration(), 'path': 'classes'} %}
 			</div>
 		{% endif %}
 	{% else %}
 		<div class="center">Brak rekordów</div>
 	{% endfor %}
-	<a class="btn btn-inverse" href="{{ path('addrace') }}">Dodaj rasę</a>
+	<a class="btn btn-inverse" href="{{ path('addclass') }}">Dodaj klasę</a>
 {% endblock %}

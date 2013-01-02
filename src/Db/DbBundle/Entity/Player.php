@@ -68,7 +68,7 @@ class Player extends Entity
 	 *
 	 * @ORM\Column(type="integer")
 	 */
-	protected $strenght;
+	protected $strength;
 
 	/**
 	 * @var User

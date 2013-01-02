@@ -40,7 +40,7 @@ class Mob extends Entity
 	/**
 	 * @ORM\Column(type="integer")
 	 */
-	protected $strenght;
+	protected $strength;
 
 	/**
 	 * @ORM\Column(type="string", length=100)
