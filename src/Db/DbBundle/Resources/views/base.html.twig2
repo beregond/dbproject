@@ -35,7 +35,7 @@
 		  		<ul class="nav main_menu">
 	  				<li>
 						<a href="{{ path('users') }}">
-							<span class="navigation_text1">Użytkownicy</span><br />
+							<span class="navigation_text1">Uzytkownicy</span><br />
 							<span class="navigation_text2">Zarejestrowane ludki</span>
 						</a>
 	  				</li>
@@ -48,7 +48,7 @@
 					<li>
 						<a href="{{ path('items') }}">
 							<span class="navigation_text1">Przedmioty</span><br />
-							<span class="navigation_text2">Wszystkie itemki</span>
+							<span class="navigation_text2">Itemki dla ka¿dego</span>
 						</a>
 					</li>
 					<li>

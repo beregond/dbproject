@@ -1,0 +1,30 @@
+@CHARSET "UTF-8";
+
+.smallText {
+font-size: 12px;
+}
+
+h2 {
+text-align: center;
+}
+
+.redButton {
+width: 184px;
+height: 82px;
+margin: auto;
+background-image: url("../images/play_button.png");
+background-repeat: no-repeat;
+background-position: center;
+float: left;
+overflow: hidden;
+}
+
+.redButtonLink {
+font-size: 16px;
+font-weight: bold;
+color: #ffca28;
+width: 180px;
+height: 80px;
+padding: 0 60px;
+line-height: 80px;
+}

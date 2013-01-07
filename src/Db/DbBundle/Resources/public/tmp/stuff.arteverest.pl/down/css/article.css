@@ -1,0 +1,76 @@
+.entryBody {
+	width: 600px;
+	min-height: 300px;
+	padding: 0 30px;
+	font-size: 15px;
+	margin-left: 15px;
+}
+
+.entryTop {
+	min-height: 128px;
+	margin: auto;
+	width: 700px;
+}
+.entryBottom {
+	min-height: 10px;
+	margin: auto;
+	font-size: 14px;
+	width: 600px; 
+}
+
+.entryThumbnail {
+	width: 128px;
+	height: 128px;
+	float: left;
+}
+.entryTitle { 
+	font-size: 17px;
+	font-weight: bold;
+	text-align: left;
+	color: #DC8A3A;
+	text-indent: 0px;
+}
+.entryIntro {
+	width: 460px; 
+	min-height: 64px;
+	float: left;
+	padding: 7px;
+	font-size: 13px;
+	text-indent: 30px;
+}
+.entrySection1 {
+	float: left;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	text-indent:30px;
+	font-size: 13px;
+}
+.entrySection2 {
+	float: left;
+	margin-top: 10px;
+	text-indent:30px;
+	font-size: 13px;
+}
+.entryGallery {}
+.entrySign {}
+
+.entryElement {
+	width: 800px;
+	padding: 0 30px;
+	font-size: 15px;
+	margin-left: 15px;
+}
+.entryElementIntro {
+	width: 500px; 
+	min-height: 64px;
+	float: left;
+	padding: 7px;
+	font-size: 13px;
+	text-indent: 30px;
+}
+.pagination_right {
+	float: right;
+	width: 250px;
+	margin-right: 30px;
+	z-index: 3;
+}
