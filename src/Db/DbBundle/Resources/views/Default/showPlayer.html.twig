@@ -1,0 +1,75 @@
+{% extends "DbBundle::base.html.twig" %}
+
+{% block body %}
+	<h2>Gracz {{ player }}</h2>
+	<table class="table table-stripped">
+		<tr>
+			<th>Nazwa</th>
+			<th>Wartość</th>
+		</tr>
+		<tr>
+			<td>Użytkownik</td>
+			<td>{{ player.getUser() }}</td>
+		</tr>
+		<tr>
+			<td>Klasa</td>
+			<td>{{ player.getClass() }}</td>
+		</tr>
+		<tr>
+			<td>Rasa</td>
+			<td>{{ player.getRace() }}</td>
+		</tr>
+		<tr>
+			<td>Inteligencja</td>
+			<td>{{ player.getSummaryIntelligence() }}</td>
+		</tr>
+		<tr>
+			<td>Mana</td>
+			<td>{{ player.getSummaryMana() }}</td>
+		</tr>
+		<tr>
+			<td>Zwinność</td>
+			<td>{{ player.getSummaryDexterity() }}</td>
+		</tr>
+		<tr>
+			<td>Siła</td>
+			<td>{{ player.getSummaryStrength() }}</td>
+		</tr>
+	</table>
+	<h3>Itemy</h3>
+
+	{% for item in player.getItem() %}
+		{% if loop.first %}
+			<table class="table table-stripped">
+				<tr>
+					<th>Nazwa</th>
+					<th>Typ</th>
+					<th>Inteligencja</th>
+					<th>Zręczność</th>
+					<th>Mana</th>
+					<th>Siła</th>
+					<th>Noszone</th>
+					<th>Edycja</th>
+				</tr>
+		{% endif %}
+		<tr>
+			<td>{{ item.name }}</td>
+			<td>{{ item.type }}</td>
+			<td>{{ item.intelligence}}/{{ item.requiredIntelligence }}</td>
+			<td>{{ item.dexterity }}/{{ item.requiredDexterity }}</td>
+			<td>{{ item.mana }}/{{ item.requiredMana }}</td>
+			<td>{{ item.strength }}/{{ item.requiredStrength }}</td>
+			<td>{% if item.weared %}Tak{% else %}Nie{% endif %}</td>
+			<td>
+				<div class="btn-group">
+					<a class="btn" href="{{ path('edititem', {'item': item.id}) }}">Edytuj</a>
+				</div>
+			</td>
+		</tr>
+		{% if loop.last %}
+			</table>
+		{% endif %}
+	{% else %}
+		<div class="center">-- Brak --</div>
+	{% endfor %}
+{% endblock %}

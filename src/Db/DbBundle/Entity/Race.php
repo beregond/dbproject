@@ -70,4 +70,9 @@ class Race extends Entity
 	 * @Assert\Min(0)
 	 */
 	protected $strength;
+
+	public function __toString()
+	{
+		return $this->getName();
+	}
 }

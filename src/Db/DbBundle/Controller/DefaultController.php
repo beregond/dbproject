@@ -247,6 +247,7 @@ class DefaultController extends Controller
 			->createFormBuilder($item)
 			->add('type', 'choice', array('choices' => array_combine(Entity\Item::getTypes(), Entity\Item::getTypes())))
 			->add('name', 'text', array('label' => 'Nazwa'))
+			->add('player', 'entity', array('label' => 'Gracz', 'class' => 'DbBundle:Player'))
 			->add('intelligence', 'number', array('label' => 'Inteligencja'))
 			->add('requiredIntelligence', 'number', array('label' => 'Wymagana inteligencja'))
 			->add('dexterity', 'number', array('label' => 'Zręczność'))
@@ -255,6 +256,7 @@ class DefaultController extends Controller
 			->add('requiredMana', 'number', array('label' => 'Wymagana mana'))
 			->add('strength', 'number', array('label' => 'Siła'))
 			->add('requiredStrength', 'number', array('label' => 'Wymagana siła'))
+			->add('weared', 'checkbox', array('label' => 'Noszone', 'required' => false))
 			->getForm()
 		;
 
@@ -356,6 +358,11 @@ class DefaultController extends Controller
 	public function addPlayerAction(Request $request)
 	{
 		$player = new Entity\Player();
+
+		if ($user = $this->getDoctrine()->getRepository('DbBundle:User')->find($request->get('user', false))) {
+			$player->setUser($user);
+		}
+
 		return $this->playerAction($request, $player);
 	}
 
@@ -396,7 +403,6 @@ class DefaultController extends Controller
 			->add('intelligence', 'number', array('label' => 'Inteligencja'))
 			->add('dexterity', 'number', array('label' => 'Zręczność'))
 			->add('strength', 'number', array('label' => 'Siła'))
-			->add('experience_points', 'number', array('label' => 'Liczba punktów doświadczenia'))
 			->getForm()
 		;
 
@@ -728,5 +734,61 @@ class DefaultController extends Controller
 			}
 		}
 		return $this->redirect($this->generateUrl('classes'));
+	}
+
+	/**
+	 * Show list of players that are owned by particular user.
+	 *
+	 * @Route("/players/{user}", name="userplayers")
+	 * @Template()
+	 *
+	 * @param Request $request
+	 * @return array
+	 */
+	public function userPlayersAction(Request $request, $user)
+	{
+		if (!$user = $this->getDoctrine()->getRepository('DbBundle:User')->find($user)) {
+			return $this->redirect($this->generateUrl('users'));
+		}
+
+		$view = array('menu' => 'players');
+
+		$players = $this
+			->getDoctrine()
+			->getEntityManager()
+			->createQueryBuilder()
+			->select('p')
+			->from('DbBundle:Player', 'p')
+			->where('p.user =' . $user->getId())
+			->orderBy('p.id')
+		;
+
+		$players = new Paginator($players);
+		$players->page($request->get('page', 1));
+		$view['players'] = $players;
+		$view['user'] = $user;
+
+		$view['deleteform'] = $this->createForm(new DeleteType())->createView();
+		$view['parameters'] = $request->query->all();
+
+		return $view;
+	}
+
+	/**
+	 * Show certain player.
+	 *
+	 * @Route("/showplayer/{player}", name="showplayer")
+	 * @Template()
+	 *
+	 * @param Request $request
+	 * @return array
+	 */
+	public function showPlayerAction(Request $request, $player)
+	{
+		if (!$player = $this->getDoctrine()->getRepository('DbBundle:Player')->find($player)) {
+			return $this->redirect($this->generateUrl('players'));
+		}
+
+		return array('menu' => 'players', 'player' => $player);
 	}
 }

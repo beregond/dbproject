@@ -38,42 +38,52 @@ class Player extends Entity
 	/**
 	 * @var int
 	 *
-	 * @ORM\Column(type="integer")
+	 * @ORM\Column(type="integer", nullable=false)
+	 *
+	 * @Assert\NotBlank()
 	 */
-	protected $mana;
+	protected $mana = 0;
+
+	/**
+	 * @var int
+	 *
+	 * @ORM\Column(type="integer", nullable=false)
+	 *
+	 * @Assert\NotBlank()
+	 */
+	protected $intelligence = 0;
 
 	/**
 	 * @var int
 	 *
 	 * @ORM\Column(type="integer")
+	 *
+	 * @Assert\NotBlank()
 	 */
-	protected $intelligence;
+	protected $experience_points = 0;
 
 	/**
 	 * @var int
 	 *
-	 * @ORM\Column(type="integer")
+	 * @ORM\Column(type="integer", nullable=false)
+	 *
+	 * @Assert\NotBlank()
 	 */
-	protected $experience_points;
+	protected $dexterity = 0;
 
 	/**
 	 * @var int
 	 *
-	 * @ORM\Column(type="integer")
-	 */
-	protected $dexterity;
-
-	/**
-	 * @var int
+	 * @ORM\Column(type="integer", nullable=false)
 	 *
-	 * @ORM\Column(type="integer")
+	 * @Assert\NotBlank()
 	 */
-	protected $strength;
+	protected $strength = 0;
 
 	/**
 	 * @var User
 	 *
-	 * @ORM\ManyToOne(targetEntity="User", inversedBy="players")
+	 * @ORM\ManyToOne(targetEntity="User", inversedBy="players", cascade={"persist"})
 	 */
 	protected $user;
 
@@ -118,5 +128,58 @@ class Player extends Entity
 	{
 		$this->item = new ArrayCollection();
 		$this->quest = new ArrayCollection();
+	}
+
+	public function __toString()
+	{
+		return $this->getName();
+	}
+
+	public function getSummaryIntelligence()
+	{
+		$sum = 0;
+		foreach ($this->getItem() as $item) {
+			if ($item->getWeared()) {
+				$sum += $item->getIntelligence();
+			}
+		}
+		$sum += $this->getIntelligence() + $this->getClass()->getIntelligence() + $this->getRace()->getIntelligence();
+		return $sum;
+	}
+
+	public function getSummaryMana()
+	{
+		$sum = 0;
+		foreach ($this->getItem() as $item) {
+			if ($item->getWeared()) {
+				$sum += $item->getMana();
+			}
+		}
+		$sum += $this->getMana() + $this->getClass()->getMana() + $this->getRace()->getMana();
+		return $sum;
+	}
+
+	public function getSummaryDexterity()
+	{
+		$sum = 0;
+		foreach ($this->getItem() as $item) {
+			if ($item->getWeared()) {
+				$sum += $item->getDexterity();
+			}
+		}
+		$sum += $this->getDexterity() + $this->getClass()->getDexterity() + $this->getRace()->getDexterity();
+		return $sum;
+	}
+
+	public function getSummaryStrength()
+	{
+		$sum = 0;
+		foreach ($this->getItem() as $item) {
+			if ($item->getWeared()) {
+				$sum += $item->getStrength();
+			}
+		}
+		$sum += $this->getStrength() + $this->getClass()->getStrength() + $this->getRace()->getStrength();
+		return $sum;
 	}
 }

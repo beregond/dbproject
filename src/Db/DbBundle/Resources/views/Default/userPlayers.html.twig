@@ -1,7 +1,7 @@
 {% extends "DbBundle::base.html.twig" %}
 
 {% block body %}
-	<h2>Gracze</h2>
+	<h2>Gracze użytkownika "{{ user }}"</h2>
 	{% for player in players %}
 		{% if loop.first %}
 			{% set deleteform %}
@@ -21,7 +21,6 @@
 			<td>
 				<div class="btn-group">
 					<a class="btn" href="{{ path('editplayer', parameters | merge({'player': player.id})) }}">Edytuj</a>
-					<a class="btn" href="{{ path('showplayer', {'player': player.id}) }}">Podgląd</a>
 				</div>
 			</td>
 			<td>
@@ -39,5 +38,5 @@
 	{% else %}
 		<div class="center">Brak rekordów</div>
 	{% endfor %}
-	<a class="btn btn-inverse" href="{{ path('addplayer') }}">Dodaj gracza</a>
+	<a class="btn btn-inverse" href="{{ path('addplayer', {'user': user.id}) }}">Dodaj gracza</a>
 {% endblock %}
